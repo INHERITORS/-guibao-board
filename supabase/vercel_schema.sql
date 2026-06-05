@@ -54,7 +54,17 @@ values
   ('tiangan-dizhi-shengxiao', '天干地支与十二生肖', '祖恩 & 竣铭', '', 0, 0, 0, 0, 0, 15),
   ('hongloumeng', '红楼梦', '雯静 & 素心', '', 0, 0, 0, 0, 0, 16),
   ('chabaixi', '茶百戏', '健美 & 昕莹', '', 0, 0, 0, 0, 0, 17)
-on conflict (id) do nothing;
+on conflict (id) do update set
+  name = excluded.name,
+  curators = excluded.curators,
+  assistants = excluded.assistants,
+  a = excluded.a,
+  b1 = excluded.b1,
+  b2 = excluded.b2,
+  c = excluded.c,
+  fengyun = excluded.fengyun,
+  display_order = excluded.display_order,
+  updated_at = now();
 
 insert into public.board_notes (type, title, body, display_order)
 select * from (
