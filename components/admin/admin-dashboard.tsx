@@ -19,6 +19,7 @@ export function AdminDashboard() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState("请先登入。");
+  const [copyStatus, setCopyStatus] = useState("");
 
   const supabase = useMemo(() => {
     if (!supabaseUrl || !anonKey) return null;
@@ -135,13 +136,17 @@ export function AdminDashboard() {
   function makePublicMessage() {
     setMessage(
       [
-        "【瑰宝榜 · 最新进度】",
+        "【瑰宝榜 · 本月 Top 5 最新进度】",
         "",
-        ...rows.slice(0, 5).map((row, index) => `${index + 1}. ${row.name}（${row.curators || "-"}）${row.total}分`),
+        ...rows.slice(0, 5).map((row, index) => {
+          const b = Number(row.b1 || 0) + Math.min(15, Number(row.b2 || 0));
+          return `${index + 1}. ${row.name}（${row.curators || "-"}）${row.total}分｜A ${row.a}｜B ${b}｜C ${row.c}｜风云 ${row.fengyun}`;
+        }),
         "",
-        "请各策展继续补齐内容深度与风云题证据。"
+        "请各策展继续补齐本月任务、内容深度与风云题证据。"
       ].join("\n")
     );
+    setCopyStatus("");
   }
 
   function makeTeamMessage() {
@@ -149,10 +154,27 @@ export function AdminDashboard() {
       rows
         .map(
           (row, index) =>
-            `#${index + 1} ${row.name}\n策展人：${row.curators || "-"}\n辅佐员：${row.assistants || "-"}\n本月总分：${row.total}\nA履约：${row.a}｜B品质：${row.b}｜C内容：${row.c}｜风云：${row.fengyun}\n`
+            [
+              `【${row.name} · 本月进度】`,
+              `当前排名：#${index + 1}`,
+              `策展人：${row.curators || "-"}`,
+              `辅佐员：${row.assistants || "-"}`,
+              `本月总分：${row.total}`,
+              `A 履约：${row.a}`,
+              `B 品质：${row.b}`,
+              `C 内容：${row.c}`,
+              `风云加分：${row.fengyun}`,
+              "请继续依本月任务补齐资料、证据与进度。"
+            ].join("\n")
         )
-        .join("\n")
+        .join("\n\n---\n\n")
     );
+    setCopyStatus("");
+  }
+
+  async function copyMessage() {
+    await navigator.clipboard.writeText(message);
+    setCopyStatus("已复制，可以贴到 WhatsApp。");
   }
 
   return (
@@ -226,10 +248,11 @@ export function AdminDashboard() {
           <section className="rounded-md border border-ink/12 bg-white/75 p-5">
             <h2 className="text-xl font-semibold">WhatsApp 公告</h2>
             <div className="mt-3 flex flex-wrap gap-3">
-              <button className="rounded-md border border-ink/15 px-4 py-2 font-semibold" onClick={makePublicMessage}>群组 Top 5</button>
-              <button className="rounded-md border border-ink/15 px-4 py-2 font-semibold" onClick={makeTeamMessage}>各策展分数</button>
-              <button className="rounded-md border border-ink/15 px-4 py-2 font-semibold" onClick={() => navigator.clipboard.writeText(message)}>复制</button>
+              <button className="rounded-md border border-ink/15 px-4 py-2 font-semibold" onClick={makePublicMessage}>生成 Top 5 群发版</button>
+              <button className="rounded-md border border-ink/15 px-4 py-2 font-semibold" onClick={makeTeamMessage}>生成各策展个别版</button>
+              <button className="rounded-md border border-ink/15 px-4 py-2 font-semibold" onClick={copyMessage}>复制</button>
             </div>
+            {copyStatus ? <p className="mt-2 text-sm font-semibold text-jade">{copyStatus}</p> : null}
             <textarea
               className="mt-3 min-h-48 w-full rounded-md border border-ink/15 p-3"
               onChange={(event) => setMessage(event.target.value)}

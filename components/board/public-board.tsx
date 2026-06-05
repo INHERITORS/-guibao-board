@@ -27,6 +27,9 @@ export function PublicBoard() {
   }, []);
 
   const rows = useMemo(() => sortRows(state.rows), [state.rows]);
+  const whatsappText = encodeURIComponent(
+    "你好，我们想了解瑰宝榜本月任务与策展进度。"
+  );
 
   return (
     <main className="mx-auto flex w-full max-w-7xl flex-col gap-7 px-4 py-7 sm:px-6 lg:px-8">
@@ -51,6 +54,22 @@ export function PublicBoard() {
             <Stat label="当前评分月" value="6月" />
             <Stat label="晋级线" value="Top 12" />
           </div>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <a
+              className="rounded-md bg-jade px-4 py-3 text-sm font-semibold text-white"
+              href={`https://wa.me/?text=${whatsappText}`}
+              rel="noreferrer"
+              target="_blank"
+            >
+              WhatsApp 联系我们
+            </a>
+            <a
+              className="rounded-md border border-ink/15 bg-white/75 px-4 py-3 text-sm font-semibold"
+              href="#monthly-tasks"
+            >
+              查看本月任务
+            </a>
+          </div>
         </div>
         <aside className="rounded-md border border-ink/12 bg-white/75 p-5">
           <h2 className="text-xl font-semibold text-ink">本月 Top 6</h2>
@@ -71,6 +90,42 @@ export function PublicBoard() {
             ))}
           </div>
         </aside>
+      </section>
+
+      <section className="grid gap-5 lg:grid-cols-[1fr_1fr]" id="monthly-tasks">
+        <div className="rounded-md border border-ink/12 bg-white/75 p-5">
+          <h2 className="text-2xl font-semibold">每个月份的任务</h2>
+          <div className="mt-4 grid gap-3">
+            {[
+              ["第 1 周", "确认策展主题、策展人、辅佐员与本月工作目标。"],
+              ["第 2 周", "补齐内容资料、故事线、展示形式与所需支援。"],
+              ["第 3 周", "提交 A/B/C 评分依据、同侪投票与风云题证据。"],
+              ["第 4 周", "策划组复核分数，发布 Top 5 与各策展最新进度。"]
+            ].map(([title, body]) => (
+              <div className="rounded-md border border-ink/10 bg-paper/60 p-4" key={title}>
+                <strong className="text-ink">{title}</strong>
+                <p className="mt-1 text-sm leading-6 text-ink/68">{body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="rounded-md border border-ink/12 bg-white/75 p-5">
+          <h2 className="text-2xl font-semibold">时间轴</h2>
+          <div className="mt-4 grid gap-3">
+            {[
+              ["6月", "名单确认与评分系统启用"],
+              ["7月 - 9月", "每月任务提交、分数复核与进度公告"],
+              ["10月 - 12月", "内容深化、现场呈现与风云题推进"],
+              ["活动前", "锁定总榜、整理亮点与发布最终说明"]
+            ].map(([title, body]) => (
+              <div className="grid grid-cols-[88px_1fr] gap-3 rounded-md border border-ink/10 bg-paper/60 p-4" key={title}>
+                <strong className="text-cinnabar">{title}</strong>
+                <p className="text-sm leading-6 text-ink/68">{body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
       <section>
