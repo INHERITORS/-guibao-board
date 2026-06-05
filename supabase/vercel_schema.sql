@@ -37,23 +37,23 @@ create policy "public read board notes"
 insert into public.curations
   (id, name, curators, assistants, a, b1, b2, c, fengyun, display_order)
 values
-  ('niulang-zhinu', '牛郎织女', '欣颖', '', 0, 0, 0, 0, 0, 1),
-  ('menora', 'Menora（泰国）', '民强 & 守恒', '', 0, 0, 0, 0, 0, 2),
+  ('niulang-zhinu', '牛郎织女', '欣颍 & 渝恩', '', 0, 0, 0, 0, 0, 1),
+  ('menora', 'Menora (泰国）', '民强 & 宇恒', '', 0, 0, 0, 0, 0, 2),
   ('hunli', '婚礼', '珈玮 & 惠翎', '', 0, 0, 0, 0, 0, 3),
-  ('baishezhuan', '白蛇传', '慧翎', '', 0, 0, 0, 0, 0, 4),
-  ('mulan', '花木兰', '凯钲', '', 0, 0, 0, 0, 0, 5),
-  ('change', '嫦娥奔月', '可薇', '', 0, 0, 0, 0, 0, 6),
-  ('liang-shanbo', '梁山伯与祝英台', '竣铭', '', 0, 0, 0, 0, 0, 7),
-  ('mengjiangnu', '孟姜女', '采萤', '', 0, 0, 0, 0, 0, 8),
-  ('nezha', '哪吒', '民强', '', 0, 0, 0, 0, 0, 9),
-  ('guanyu', '关公', '素岑', '', 0, 0, 0, 0, 0, 10),
-  ('mazu', '妈祖', '健美', '', 0, 0, 0, 0, 0, 11),
-  ('baosheng', '保生大帝', '喻萱', '', 0, 0, 0, 0, 0, 12),
-  ('qixi', '七夕', '惠翎', '', 0, 0, 0, 0, 0, 13),
-  ('yuanxiao', '元宵', '凯钲', '', 0, 0, 0, 0, 0, 14),
-  ('shadow-puppet', '皮影戏', '可薇', '', 0, 0, 0, 0, 0, 15),
-  ('lion-dance', '舞狮', '竣铭', '', 0, 0, 0, 0, 0, 16),
-  ('clan-stories', '姓氏故事', '采萤', '', 0, 0, 0, 0, 0, 17)
+  ('baxian-guohai', '八仙过海', '尤歆', '', 0, 0, 0, 0, 0, 4),
+  ('parameswara', 'Parameswara', '王通 & 宇翔', '', 0, 0, 0, 0, 0, 5),
+  ('change-houyi', '嫦娥奔月/后羿', '惠翎 & 婞荧', '', 0, 0, 0, 0, 0, 6),
+  ('sang-kancil', 'Sang Kancil', '杰升 & 凯渲', '', 0, 0, 0, 0, 0, 7),
+  ('xiyouji-danaotiangong', '西游记/大闹天宫', '喻萱', '', 0, 0, 0, 0, 0, 8),
+  ('niangao', '年糕', '竣铭 & 哲豪 & 家翰', '', 0, 0, 0, 0, 0, 9),
+  ('shuihuzhuan-108', '水浒传/108 好汉', '健美', '', 0, 0, 0, 0, 0, 10),
+  ('shennong', '神农尝百草', '威祥', '', 0, 0, 0, 0, 0, 11),
+  ('dabogong', '大伯公', '采瑩', '', 0, 0, 0, 0, 0, 12),
+  ('hanyu', '韩愈的故事', '可薇', '', 0, 0, 0, 0, 0, 13),
+  ('sanguoyanyi', '三国演义', '铭轩 & 奕恒', '', 0, 0, 0, 0, 0, 14),
+  ('tiangan-dizhi-shengxiao', '天干地支与十二生肖', '祖恩 & 竣铭', '', 0, 0, 0, 0, 0, 15),
+  ('hongloumeng', '红楼梦', '雯静 & 素心', '', 0, 0, 0, 0, 0, 16),
+  ('chabaixi', '茶百戏', '健美 & 昕莹', '', 0, 0, 0, 0, 0, 17)
 on conflict (id) do nothing;
 
 insert into public.board_notes (type, title, body, display_order)
