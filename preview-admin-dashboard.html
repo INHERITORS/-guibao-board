@@ -1,0 +1,889 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>瑰宝榜 · 策划组内部 Dashboard</title>
+    <style>
+      :root {
+        --ink: #23211d;
+        --paper: #f7f2e8;
+        --muted: rgba(35, 33, 29, 0.66);
+        --line: rgba(35, 33, 29, 0.12);
+        --jade: #2f6f63;
+        --red: #b9472e;
+        --gold: #c89b3c;
+        --blue: #34456b;
+        --white: rgba(255, 255, 255, 0.76);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+        background: #f7f2e8;
+        color: var(--ink);
+      }
+
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        border-bottom: 1px solid var(--line);
+        background: rgba(247, 242, 232, 0.94);
+        backdrop-filter: blur(12px);
+      }
+
+      .nav,
+      main {
+        width: min(1240px, calc(100% - 32px));
+        margin: 0 auto;
+      }
+
+      .nav {
+        display: flex;
+        min-height: 64px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 900;
+      }
+
+      .mark {
+        display: grid;
+        width: 38px;
+        height: 38px;
+        place-items: center;
+        border-radius: 8px;
+        background: var(--ink);
+        color: var(--paper);
+      }
+
+      .month-switch {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      select,
+      input,
+      button {
+        min-height: 42px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: white;
+        color: var(--ink);
+        font: inherit;
+      }
+
+      select,
+      input {
+        padding: 0 12px;
+      }
+
+      button {
+        cursor: pointer;
+        padding: 0 14px;
+        font-weight: 800;
+      }
+
+      .primary {
+        border-color: var(--ink);
+        background: var(--ink);
+        color: var(--paper);
+      }
+
+      main {
+        padding: 24px 0 56px;
+      }
+
+      .top {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 20px;
+        align-items: end;
+        margin-bottom: 20px;
+      }
+
+      .eyebrow {
+        margin: 0 0 8px;
+        color: var(--red);
+        font-size: 14px;
+        font-weight: 900;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        margin-bottom: 8px;
+        font-size: clamp(30px, 4vw, 44px);
+      }
+
+      .desc {
+        max-width: 760px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .grid {
+        display: grid;
+        gap: 14px;
+      }
+
+      .kpis {
+        grid-template-columns: repeat(5, 1fr);
+        margin-bottom: 18px;
+      }
+
+      .card,
+      .panel,
+      .table-wrap {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--white);
+      }
+
+      .card {
+        padding: 16px;
+      }
+
+      .card .label {
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      .card .value {
+        margin-top: 8px;
+        font-size: 30px;
+        font-weight: 900;
+      }
+
+      .ok {
+        color: var(--jade);
+      }
+
+      .warn {
+        color: var(--gold);
+      }
+
+      .danger {
+        color: var(--red);
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(320px, 360px);
+        gap: 16px;
+        align-items: start;
+      }
+
+      .layout > .grid,
+      .layout > aside,
+      .panel,
+      .table-wrap {
+        min-width: 0;
+      }
+
+      .panel {
+        padding: 18px;
+      }
+
+      .panel-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+
+      .panel h2 {
+        margin: 0;
+        font-size: 20px;
+      }
+
+      .steps {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .step {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(248, 243, 232, 0.72);
+        padding: 14px;
+      }
+
+      .step strong {
+        display: block;
+        margin-bottom: 7px;
+      }
+
+      .step p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 8px;
+        padding: 6px 8px;
+        background: rgba(47, 111, 99, 0.1);
+        color: var(--jade);
+        font-size: 12px;
+        font-weight: 900;
+      }
+
+      .badge.red {
+        background: rgba(185, 71, 46, 0.1);
+        color: var(--red);
+      }
+
+      .badge.gold {
+        background: rgba(200, 155, 60, 0.15);
+        color: #8b681e;
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        min-width: 1060px;
+        border-collapse: collapse;
+      }
+
+      th {
+        background: var(--ink);
+        color: var(--paper);
+        text-align: left;
+      }
+
+      th,
+      td {
+        border-top: 1px solid var(--line);
+        padding: 12px;
+        font-size: 14px;
+        white-space: nowrap;
+      }
+
+      .input-cell {
+        width: 86px;
+      }
+
+      .input-cell input {
+        width: 76px;
+        min-height: 34px;
+      }
+
+      .month-total {
+        font-weight: 900;
+      }
+
+      .saved-note {
+        color: var(--jade);
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      textarea {
+        width: 100%;
+        min-height: 160px;
+        resize: vertical;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: white;
+        padding: 12px;
+        color: var(--ink);
+        font: inherit;
+        line-height: 1.6;
+      }
+
+      .side-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .todo {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(248, 243, 232, 0.72);
+        padding: 12px;
+      }
+
+      .todo strong {
+        display: block;
+        margin-bottom: 4px;
+      }
+
+      .todo span {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      .editable-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .editable-item {
+        display: grid;
+        gap: 8px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(248, 243, 232, 0.72);
+        padding: 12px;
+      }
+
+      .editable-row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .editable-item textarea {
+        min-height: 72px;
+      }
+
+      .ghost {
+        background: rgba(255, 255, 255, 0.72);
+      }
+
+      .two {
+        grid-template-columns: 1fr 1fr;
+        margin-top: 16px;
+      }
+
+      .challenge {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(248, 243, 232, 0.72);
+        padding: 14px;
+      }
+
+      .challenge-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+
+      @media (max-width: 980px) {
+        .top,
+        .layout,
+        .two {
+          grid-template-columns: 1fr;
+        }
+
+        .kpis,
+        .steps {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 560px) {
+        .kpis,
+        .steps {
+          grid-template-columns: 1fr;
+        }
+
+        .nav {
+          align-items: flex-start;
+          flex-direction: column;
+          padding: 12px 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="nav">
+        <div class="brand"><span class="mark">策</span><span>瑰宝榜 · 策划组后台</span></div>
+        <div class="month-switch">
+          <select aria-label="选择月份">
+            <option>2026-06 首发月</option>
+            <option>2026-07 寻根月</option>
+            <option>2026-08 搭桥月</option>
+          </select>
+          <button class="primary" id="lock-month" type="button">锁定月份</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="top">
+        <div>
+          <p class="eyebrow">内部操作台</p>
+          <h1>2026-06 月度评分</h1>
+          <p class="desc">
+            策划组在这里完成每月 15 分钟评分流程：录入履约、品质、内容深度，处理同侪票与风云题，确认无误后锁定并发布到公开总榜。
+          </p>
+        </div>
+          <div class="month-switch">
+            <button id="copy-whatsapp" type="button">复制 WhatsApp 公告</button>
+            <button id="open-whatsapp" type="button">打开 WhatsApp</button>
+            <button id="publish-board" class="primary" type="button">发布对外榜</button>
+            <button id="print-board" type="button">打印月榜</button>
+          </div>
+      </section>
+
+      <section class="grid kpis">
+        <div class="card"><div class="label">本月状态</div><div class="value warn" id="month-status">未锁定</div></div>
+        <div class="card"><div class="label">B1 已录入</div><div class="value" id="b1-count">0/17</div></div>
+        <div class="card"><div class="label">同侪投票</div><div class="value">9/17</div></div>
+        <div class="card"><div class="label">风云题裁定</div><div class="value">1/3</div></div>
+        <div class="card"><div class="label">内容复核</div><div class="value ok">完成</div></div>
+      </section>
+
+      <section class="layout">
+        <div class="grid">
+          <section class="panel">
+            <div class="panel-head">
+              <h2>关月流程</h2>
+              <span class="badge gold">13 分钟前更新</span>
+            </div>
+            <div class="grid steps">
+              <div class="step"><strong>A 履约</strong><p>出席与里程碑自动合算，宽限缺席由策划组标记。</p></div>
+              <div class="step"><strong>B 品质</strong><p>B1 内部分 + B2 同侪票，B2 封顶 15 分。</p></div>
+              <div class="step"><strong>C 内容</strong><p>深度与制作项全年累积，一勾就在。</p></div>
+              <div class="step"><strong>风云题</strong><p>月题宣布、证据提交、裁定得分进入同一排名。</p></div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <h2>评分输入</h2>
+              <span class="saved-note" id="save-status">已启用本机自动保存</span>
+            </div>
+            <div class="table-wrap">
+              <table id="score-table">
+                <thead>
+                  <tr>
+                    <th>策展</th><th>策展人</th><th>辅佐员</th><th>A 履约</th><th>B1 内部分</th><th>B2 同侪票</th><th>C 内容</th><th>风云</th><th>本月</th><th>状态</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="grid two">
+            <div class="panel">
+              <div class="panel-head">
+                <h2>风云题裁定</h2>
+                <span class="badge gold">本月 40 分池</span>
+              </div>
+              <div class="side-list">
+                <div class="challenge">
+                  <div class="challenge-top"><strong>班底成形</strong><span class="badge">已裁定</span></div>
+                  <p class="desc">20 分 · 得分策展：牛郎织女</p>
+                </div>
+                <div class="challenge">
+                  <div class="challenge-top"><strong>我的主题为什么值得一年</strong><span class="badge red">待裁定</span></div>
+                  <p class="desc">10 分 · 12 份证据待看</p>
+                </div>
+                <div class="challenge">
+                  <div class="challenge-top"><strong>迎新会主题展现</strong><span class="badge gold">未公布</span></div>
+                  <p class="desc">10 分 · 由当月轮值者公布</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-head">
+                <h2>同侪投票</h2>
+                <span class="badge red">8 个未投</span>
+              </div>
+              <div class="side-list">
+                <div class="todo"><strong>最佳瑰宝策展</strong><span>最高票：白蛇传 · 3 票</span></div>
+                <div class="todo"><strong>最进步瑰宝策展</strong><span>最高票：西游记 · 4 票</span></div>
+                <div class="todo"><strong>匿名原则</strong><span>后台只显示合算结果，不公开投票者。</span></div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <aside class="grid">
+          <section class="panel">
+            <div class="panel-head">
+              <h2>待处理</h2>
+              <button id="add-todo" type="button">新增</button>
+            </div>
+            <div class="editable-list" id="todo-list"></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <h2>公开发布设置</h2>
+              <button id="add-publish-setting" type="button">新增</button>
+            </div>
+            <div class="editable-list" id="publish-setting-list"></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <h2>B1 / B2 说明</h2>
+            </div>
+            <div class="side-list">
+              <div class="todo"><strong>B1 内部分</strong><span>由策划组月度会议简短商议后给分：5 表面、10 扎实、15 出众。</span></div>
+              <div class="todo"><strong>B2 同侪票</strong><span>每策展匿名投两票：最佳 +3、最进步 +2，系统合算后封顶 15 分。</span></div>
+              <div class="todo"><strong>多人策展人</strong><span>同一格可填写 2-4 位策展人，例如：欣颖 / 雯靖 / 喻萱。</span></div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <h2>WhatsApp 公告</h2>
+              <span class="badge">自动生成</span>
+            </div>
+            <div class="side-list" style="margin-bottom: 12px;">
+              <button id="make-public-message" type="button">生成群组 Top 5 公告</button>
+              <button id="make-team-message" type="button">生成各策展群组分数</button>
+            </div>
+            <textarea id="whatsapp-message" aria-label="WhatsApp 公告内容"></textarea>
+          </section>
+        </aside>
+      </section>
+    </main>
+    <script>
+      const storageKey = "guibao-admin-preview-v1";
+      const syncChannel = "BroadcastChannel" in window ? new BroadcastChannel("guibao-board-sync") : null;
+      const status = document.querySelector("#save-status");
+      const monthStatus = document.querySelector("#month-status");
+      const b1Count = document.querySelector("#b1-count");
+      const defaultCurations = [
+        ["niulang-zhinu", "牛郎织女", "欣颖", "辅佐员 A / 辅佐员 B", 28, 15, 7, 30, 120],
+        ["hongloumeng", "红楼梦", "雯靖", "辅佐员 A", 30, 10, 8, 28, 60],
+        ["xiyouji", "西游记", "喻萱", "辅佐员 A / 辅佐员 B", 18, 5, 7, 22, 180],
+        ["baishezhuan", "白蛇传", "慧翎", "", 26, 15, 9, 24, 80],
+        ["mulan", "花木兰", "凯钲", "", 24, "", 5, 24, 90],
+        ["change", "嫦娥奔月", "可薇", "", 22, 10, 9, 18, 100],
+        ["liang-shanbo", "梁山伯与祝英台", "竣铭", "", 25, 10, 6, 20, 50],
+        ["mengjiangnu", "孟姜女", "采萤", "", 20, 5, 5, 18, 40],
+        ["nezha", "哪吒", "民强", "", 29, 15, 10, 26, 70],
+        ["guanyu", "关公", "素岑", "", 27, 10, 6, 24, 60],
+        ["mazu", "妈祖", "健美", "", 30, 15, 8, 30, 90],
+        ["baosheng", "保生大帝", "喻萱", "", 21, 10, 4, 16, 40],
+        ["qixi", "七夕", "惠翎", "", 24, 10, 6, 22, 60],
+        ["yuanxiao", "元宵", "凯钲", "", 23, 5, 4, 18, 35],
+        ["shadow-puppet", "皮影戏", "可薇", "", 26, 15, 7, 24, 65],
+        ["lion-dance", "舞狮", "竣铭", "", 28, 10, 6, 20, 80],
+        ["clan-stories", "姓氏故事", "采萤", "", 22, "", 3, 12, 20]
+      ];
+      const defaultTodos = [
+        { title: "补录 B1", body: "花木兰、嫦娥奔月等 5 个策展尚未录入。" },
+        { title: "复核西游记风云分", body: "本月风云加分高，锁定前需二次确认证据。" },
+        { title: "提醒同侪投票", body: "8 个策展尚未提交本月投票。" }
+      ];
+      const defaultPublishSettings = [
+        { title: "公开显示", body: "排名、总分、A/B/C/风云分、亮点。" },
+        { title: "内部保留", body: "扣分原因、评语、人工调整记录。" },
+        { title: "发布出口", body: "网页总榜、WhatsApp 文字、打印月榜。" }
+      ];
+      const tbody = document.querySelector("#score-table tbody");
+
+      function renderRows(savedRows = {}) {
+        tbody.innerHTML = defaultCurations
+          .map(([key, name, curator, assistant, a, b1, b2, c, fengyun]) => {
+            const saved = savedRows[key] || {};
+            const values = { a, b1, b2, c, fengyun, ...saved };
+            const displayName = Object.prototype.hasOwnProperty.call(saved, "name") ? saved.name : name;
+            const displayCurator = Object.prototype.hasOwnProperty.call(saved, "curator") ? saved.curator : curator;
+            const displayAssistant = Object.prototype.hasOwnProperty.call(saved, "assistant") ? saved.assistant : assistant;
+            return `<tr data-key="${key}">
+              <td class="input-cell"><input data-field="name" value="${displayName}" type="text" /></td>
+              <td class="input-cell"><input data-field="curator" value="${displayCurator}" type="text" /></td>
+              <td class="input-cell"><input data-field="assistant" value="${displayAssistant}" type="text" placeholder="可填多位" /></td>
+              <td class="input-cell"><input data-field="a" value="${values.a}" type="number" min="0" max="30" /></td>
+              <td class="input-cell"><input data-field="b1" value="${values.b1}" placeholder="-" type="number" min="0" max="15" /></td>
+              <td class="input-cell"><input data-field="b2" value="${values.b2}" type="number" min="0" max="15" /></td>
+              <td class="input-cell"><input data-field="c" value="${values.c}" type="number" min="0" max="40" /></td>
+              <td class="input-cell"><input data-field="fengyun" value="${values.fengyun}" type="number" min="0" /></td>
+              <td class="month-total">0</td><td><span class="badge">可发布</span></td>
+            </tr>`;
+          })
+          .join("");
+      }
+
+      let rows = [];
+
+      function escapeHtml(value) {
+        return String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;");
+      }
+
+      function editableListItem(item, index, type) {
+        return `<div class="editable-item" data-index="${index}" data-type="${type}">
+          <div class="editable-row">
+            <input data-field="title" value="${escapeHtml(item.title)}" placeholder="标题" />
+            <button class="ghost" type="button" data-action="delete">删除</button>
+          </div>
+          <textarea data-field="body" placeholder="说明">${escapeHtml(item.body)}</textarea>
+        </div>`;
+      }
+
+      function renderEditableLists(data = {}) {
+        const todos = data.todos || defaultTodos;
+        const publishSettings = data.publishSettings || defaultPublishSettings;
+        document.querySelector("#todo-list").innerHTML = todos
+          .map((item, index) => editableListItem(item, index, "todos"))
+          .join("");
+        document.querySelector("#publish-setting-list").innerHTML = publishSettings
+          .map((item, index) => editableListItem(item, index, "publishSettings"))
+          .join("");
+        bindEditableListEvents();
+      }
+
+      function collectEditableList(id) {
+        return [...document.querySelectorAll(`#${id} .editable-item`)].map((item) => ({
+          title: item.querySelector('[data-field="title"]').value,
+          body: item.querySelector('[data-field="body"]').value
+        }));
+      }
+
+      function bindEditableListEvents() {
+        document.querySelectorAll(".editable-item input, .editable-item textarea").forEach((input) => {
+          input.addEventListener("input", save);
+        });
+        document.querySelectorAll('[data-action="delete"]').forEach((button) => {
+          button.addEventListener("click", () => {
+            button.closest(".editable-item").remove();
+            save();
+          });
+        });
+      }
+
+      function numeric(input) {
+        return Number.parseFloat(input.value || "0") || 0;
+      }
+
+      function rowData(row) {
+        const data = {};
+        row.querySelectorAll("input").forEach((input) => {
+          data[input.dataset.field] = input.value;
+        });
+        return data;
+      }
+
+      function applyData(data) {
+        if (data.locked) {
+          monthStatus.textContent = "已锁定";
+          monthStatus.className = "value ok";
+        }
+      }
+
+      function computeRow(row) {
+        const a = numeric(row.querySelector('[data-field="a"]'));
+        const b1Input = row.querySelector('[data-field="b1"]');
+        const b1 = numeric(b1Input);
+        const b2 = Math.min(15, numeric(row.querySelector('[data-field="b2"]')));
+        const c = Math.min(40, numeric(row.querySelector('[data-field="c"]')));
+        const fengyun = numeric(row.querySelector('[data-field="fengyun"]'));
+        const total = a + b1 + b2 + c + fengyun;
+        row.querySelector(".month-total").textContent = String(total);
+        const badge = row.querySelector(".badge");
+        if (!b1Input.value) {
+          badge.textContent = "缺 B1";
+          badge.className = "badge red";
+        } else if (fengyun >= 160) {
+          badge.textContent = "待复核";
+          badge.className = "badge red";
+        } else {
+          badge.textContent = "可发布";
+          badge.className = "badge";
+        }
+      }
+
+      function computeAll() {
+        rows.forEach(computeRow);
+        const filled = rows.filter((row) => row.querySelector('[data-field="b1"]').value).length;
+        b1Count.textContent = `${filled}/17`;
+        updateWhatsAppMessage();
+      }
+
+      function save() {
+        const rowsData = {};
+        rows.forEach((row) => {
+          rowsData[row.dataset.key] = rowData(row);
+        });
+        const existing = JSON.parse(localStorage.getItem(storageKey) || "{}");
+        localStorage.setItem(
+          storageKey,
+          JSON.stringify({
+            ...existing,
+            rows: rowsData,
+            todos: collectEditableList("todo-list"),
+            publishSettings: collectEditableList("publish-setting-list"),
+            updatedAt: new Date().toISOString()
+          })
+        );
+        status.textContent = `已自动保存 · ${new Date().toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" })}`;
+      }
+
+      function publishBoard() {
+        const rowsData = {};
+        rows.forEach((row) => {
+          rowsData[row.dataset.key] = rowData(row);
+        });
+        const existing = JSON.parse(localStorage.getItem(storageKey) || "{}");
+        localStorage.setItem(
+          storageKey,
+          JSON.stringify({
+            ...existing,
+            rows: rowsData,
+            publishedRows: rowsData,
+            publishedAt: new Date().toISOString()
+          })
+        );
+        status.textContent = "已发布到对外榜，请刷新对外 dashboard 查看";
+        syncChannel?.postMessage({ type: "published", at: Date.now() });
+      }
+
+      function load() {
+        const saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
+        renderRows(saved.rows || {});
+        renderEditableLists(saved);
+        rows = [...document.querySelectorAll("#score-table tbody tr")];
+        applyData(saved);
+        rows.forEach((row) => {
+          row.querySelectorAll("input").forEach((input) => {
+            input.addEventListener("input", () => {
+              computeAll();
+              save();
+            });
+          });
+        });
+        computeAll();
+      }
+
+      function publicRows() {
+        return rows
+          .map((row) => {
+            const fields = rowData(row);
+            const total =
+              Number(fields.a || 0) +
+              Number(fields.b1 || 0) +
+              Math.min(15, Number(fields.b2 || 0)) +
+              Math.min(40, Number(fields.c || 0)) +
+              Number(fields.fengyun || 0);
+            return {
+              name: fields.name || "未命名策展",
+              curator: fields.curator || "未填写",
+              assistant: fields.assistant || "",
+              total,
+              a: Number(fields.a || 0),
+              b: Number(fields.b1 || 0) + Math.min(15, Number(fields.b2 || 0)),
+              c: Math.min(40, Number(fields.c || 0)),
+              fengyun: Number(fields.fengyun || 0)
+            };
+          })
+          .sort((left, right) => right.total - left.total);
+      }
+
+      function updateWhatsAppMessage() {
+        updatePublicMessage();
+      }
+
+      function updatePublicMessage() {
+        const top = publicRows().slice(0, 5);
+        const lines = [
+          "【瑰宝榜 · 2026-06 最新进度】",
+          "",
+          "策划组已更新本月评分进度，目前公开榜 Top 5：",
+          ...top.map((item, index) => `${index + 1}. ${item.name}（${item.curator}）${item.total}分`),
+          "",
+          "分数包含：A履约、B品质、C内容深度、风云题。",
+          "请各策展继续补齐内容深度与本月风云题证据。",
+          "",
+          "注：内部评语与复核事项不在群组公开。"
+        ];
+        document.querySelector("#whatsapp-message").value = lines.join("\n");
+      }
+
+      function updateTeamMessages() {
+        const lines = ["【瑰宝榜 · 各策展本月分数】", ""];
+        publicRows().forEach((item, index) => {
+          lines.push(
+            `#${index + 1} ${item.name}`,
+            `策展人：${item.curator}`,
+            item.assistant ? `辅佐员：${item.assistant}` : "辅佐员：-",
+            `本月总分：${item.total}`,
+            `A履约：${item.a}｜B品质：${item.b}｜C内容：${item.c}｜风云：${item.fengyun}`,
+            "请继续补齐内容深度与本月证据。内部评语由策划组另行沟通。",
+            ""
+          );
+        });
+        document.querySelector("#whatsapp-message").value = lines.join("\n");
+      }
+
+      document.querySelector("#lock-month").addEventListener("click", () => {
+        const existing = JSON.parse(localStorage.getItem(storageKey) || "{}");
+        localStorage.setItem(storageKey, JSON.stringify({ ...existing, locked: true }));
+        monthStatus.textContent = "已锁定";
+        monthStatus.className = "value ok";
+        status.textContent = "月份已锁定在本机预览";
+      });
+
+      document.querySelector("#print-board").addEventListener("click", () => window.print());
+      document.querySelector("#publish-board").addEventListener("click", publishBoard);
+      document.querySelector("#add-todo").addEventListener("click", () => {
+        document.querySelector("#todo-list").insertAdjacentHTML(
+          "beforeend",
+          editableListItem({ title: "新待处理事项", body: "请填写说明。" }, document.querySelectorAll("#todo-list .editable-item").length, "todos")
+        );
+        bindEditableListEvents();
+        save();
+      });
+      document.querySelector("#add-publish-setting").addEventListener("click", () => {
+        document.querySelector("#publish-setting-list").insertAdjacentHTML(
+          "beforeend",
+          editableListItem({ title: "新发布设置", body: "请填写说明。" }, document.querySelectorAll("#publish-setting-list .editable-item").length, "publishSettings")
+        );
+        bindEditableListEvents();
+        save();
+      });
+      document.querySelector("#make-public-message").addEventListener("click", updatePublicMessage);
+      document.querySelector("#make-team-message").addEventListener("click", updateTeamMessages);
+      document.querySelector("#copy-whatsapp").addEventListener("click", async () => {
+        const message = document.querySelector("#whatsapp-message").value;
+        try {
+          await navigator.clipboard.writeText(message);
+          status.textContent = "WhatsApp 公告已复制";
+        } catch {
+          document.querySelector("#whatsapp-message").select();
+          status.textContent = "请按 Ctrl+C 复制公告";
+        }
+      });
+      document.querySelector("#open-whatsapp").addEventListener("click", () => {
+        const message = encodeURIComponent(document.querySelector("#whatsapp-message").value);
+        window.open(`https://wa.me/?text=${message}`, "_blank");
+      });
+
+      load();
+    </script>
+  </body>
+</html>
